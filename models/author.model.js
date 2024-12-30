@@ -11,6 +11,10 @@ const Author = sequelize.define("Author", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  imageUrl: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
 });
 
 module.exports = Author;
