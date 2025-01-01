@@ -9,6 +9,7 @@ const {
   authenticate,
   authorizeAdmin,
 } = require("./middlewares/auth.middleware");
+const userService = require("./services/user.service");
 
 const app = express();
 
@@ -24,8 +25,24 @@ app.use("/api/authors", authorRoutes);
 // Sync database
 sequelize
   .sync({ alter: true })
-  .then(() => {
+  .then(async () => {
     console.log("Database synced");
+    // Seed admin user
+    const adminUser = await userService.getUserByUsernameOrEmail("admin");
+    if (!adminUser) {
+      console.log("Creating admin user...");
+      await userService.createUser({
+        firstName: "Arshiya",
+        lastName: "Tajik",
+        username: "admin",
+        email: "admin@yoursite.com",
+        password: "admin",
+        role: "admin",
+      });
+      console.log("Admin user created successfully.");
+    } else {
+      console.log("Admin user already exists.");
+    }
   })
   .catch((err) => {
     console.error("Error syncing database:", err);
