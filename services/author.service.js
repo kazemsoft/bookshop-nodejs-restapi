@@ -1,4 +1,5 @@
 const Author = require("../models/author.model");
+const { Op } = require("sequelize");
 
 const createAuthor = async (authorData) => {
   return await Author.create(authorData);
@@ -27,6 +28,13 @@ const deleteAuthor = async (id) => {
   }
   return await author.destroy();
 };
+const searchAuthor = async (query) => {
+  return await Author.findAll({
+    where: {
+      [Op.or]: [{ name: { [Op.like]: `%${query}%` } }],
+    },
+  });
+};
 
 module.exports = {
   createAuthor,
@@ -34,4 +42,5 @@ module.exports = {
   getAuthorById,
   updateAuthor,
   deleteAuthor,
+  searchAuthor,
 };

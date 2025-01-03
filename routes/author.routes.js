@@ -20,6 +20,16 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/search", async (req, res) => {
+  try {
+    const query = req.query.q;
+    const authors = await authorService.searchAuthor(query);
+    res.status(200).json(authors);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 router.get("/:id", async (req, res) => {
   try {
     const author = await authorService.getAuthorById(req.params.id);
